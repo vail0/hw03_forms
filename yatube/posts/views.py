@@ -102,19 +102,19 @@ def post_edit(request, post_id):
     if post.author != request.user:
         return redirect('posts:index')
 
-    # form, в которой не стираются поля    
+    # form, в которой не стираются поля
     form = PostForm(
-    request.POST or None,
-    files=request.FILES or None,
-    instance=post
+        request.POST or None,
+        files=request.FILES or None,
+        instance=post
     )
-    
+
     if request.method == "POST":
-#        form = PostForm(request.POST)
+        # form = PostForm(request.POST)
 
         if form.is_valid():
             form.save()
             return redirect('posts:post_detail', post_id)
 #    form = PostForm()
     return render(request, "posts/create_post.html",
-                  {"form": form, "is_edit": is_edit, 'post' : post})
+                  {"form": form, "is_edit": is_edit, 'post': post})
