@@ -7,14 +7,19 @@ from .forms import PostForm
 from .models import Group, Post, User
 
 
+def paginate(req, pag_post):
+    paginator = Paginator(pag_post, settings.AMOUNT)
+    page_number = req.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return page_obj
+
+
 def index(request):
     template = 'posts/index.html'
     posts = Post.objects.select_related('group', 'author')
-    paginator = Paginator(posts, settings.AMOUNT)
 
-    page_number = request.GET.get('page')
-
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginate(request, posts)
 
     context = {
         'posts': posts,
@@ -26,11 +31,8 @@ def index(request):
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     posts = Post.objects.filter(group=group)
-    paginator = Paginator(posts, settings.AMOUNT)
 
-    page_number = request.GET.get('page')
-
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginate(request, posts)
 
     template = 'posts/group_list.html'
     context = {
@@ -46,11 +48,8 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     posts_auth = author.posts.select_related('group', 'author')
 
-    paginator = Paginator(posts_auth, 10)
+    page_obj = paginate(request, posts_auth)
 
-    page_number = request.GET.get('page')
-
-    page_obj = paginator.get_page(page_number)
     context = {
         'author': author,
         'posts_auth': posts_auth,
@@ -62,11 +61,9 @@ def profile(request, username):
 def post_detail(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
-    posts_by = post.author.posts.all()
-    # posts_by передаётся в post_detail "всего постов автора"
     context = {
         'post': post,
-        'posts_by': posts_by,
+        'posts_by': post.author.posts.all(),
 
     }
     return render(request, 'posts/post_detail.html', context)
@@ -99,7 +96,7 @@ def post_create(request):
 def post_edit(request, post_id):
 
     post = get_object_or_404(Post, pk=post_id)
-    is_edit = True
+
     if post.author != request.user:
         return redirect('posts:index')
 
@@ -118,4 +115,4 @@ def post_edit(request, post_id):
             return redirect('posts:post_detail', post_id)
 #    form = PostForm()
     return render(request, "posts/create_post.html",
-                  {"form": form, "is_edit": is_edit, 'post': post})
+                  {"form": form, "is_edit": True, 'post': post})
