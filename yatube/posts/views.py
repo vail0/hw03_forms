@@ -72,24 +72,21 @@ def post_detail(request, post_id):
 @login_required
 def post_create(request):
     # Проверяем, получен POST-запрос или какой-то другой
-    if request.method == "POST":
-        # Создаём объект формы класса PostForm
-        # и передаём в него полученные данные
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            # Берём валидированные данные формы из словаря form.cleaned_data
+    form = PostForm(
+        request.POST or None,
+    )
 
-            post.author = request.user
-            post.save()
+    if form.is_valid():
+        post = form.save(commit=False)
+        # Берём валидированные данные формы из словаря form.cleaned_data
 
-            return redirect("posts:profile", post.author.username)
-        return render(request, "posts/create_post.html", {'form': form,
-                      "is_edit": False})
-    # Если пришёл не POST-запрос - создаём и передаём в шаблон пустую форму
-    # пусть пользователь напишет что-нибудь
-    form = PostForm()
-    return render(request, "posts/create_post.html", {'form': form})
+        post.author = request.user
+        post.save()
+
+        return redirect("posts:profile", post.author.username)
+
+    return render(request, "posts/create_post.html", {'form': form,
+                  "is_edit": False})
 
 
 @login_required
@@ -108,11 +105,10 @@ def post_edit(request, post_id):
     )
 
     if request.method == "POST":
-        # form = PostForm(request.POST)
 
         if form.is_valid():
             form.save()
             return redirect('posts:post_detail', post_id)
-#    form = PostForm()
+
     return render(request, "posts/create_post.html",
                   {"form": form, "is_edit": True, 'post': post})
