@@ -7,29 +7,7 @@
     <h1>Все посты пользователя {{ author.get_full_name }} </h1>
     <h3>Всего постов: {{ posts_auth.count }} </h3>   
     {% for post in page_obj%}
-      <article>
-        <ul>
-          <li>
-            Автор: {{ post.author.get_full_name }}
-          <!--  <a href="{ url 'posts:profile' post.author.username %}">все посты пользователя</a>-->    <!--ыыыы-->
-          </li>
-          <li>
-            Дата публикации: {{ post.pub_date|date:"d E Y" }} 
-          </li>
-        </ul>
-        <p>          
-          {{ post.text }}            
-        </p>
-       <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>            <!--ыыыы-->
-      </article>
-    
-      {% if post.group and not group %}
-        <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
-      {% endif %}
-
-      {% if not forloop.last %}<hr>{% endif %}
-      <!-- Остальные посты. после последнего нет черты -->
-      <!-- Здесь подключён паджинатор -->
+      {% include 'includes/post_card.html' %}
     {% endfor %}
     
     {% include 'includes/paginator.html' %}
