@@ -44,7 +44,6 @@ def group_posts(request, slug):
 
 
 def profile(request, username):
-    # Здесь код запроса к модели и создание словаря контекста
     author = get_object_or_404(User, username=username)
     posts_auth = author.posts.select_related('group', 'author')
 
@@ -71,14 +70,12 @@ def post_detail(request, post_id):
 
 @login_required
 def post_create(request):
-    # Проверяем, получен POST-запрос или какой-то другой
     form = PostForm(
         request.POST or None,
     )
 
     if form.is_valid():
         post = form.save(commit=False)
-        # Берём валидированные данные формы из словаря form.cleaned_data
 
         post.author = request.user
         post.save()
@@ -97,7 +94,6 @@ def post_edit(request, post_id):
     if post.author != request.user:
         return redirect('posts:index')
 
-    # form, в которой не стираются поля
     form = PostForm(
         request.POST or None,
         files=request.FILES or None,
