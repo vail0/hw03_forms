@@ -30,7 +30,7 @@ def index(request):
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    posts = group.groups.select_related('group', 'author')
+    posts = group.groups.select_related('author')
 
     page_obj = paginate(request, posts)
 
@@ -45,7 +45,7 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    posts_auth = author.posts.select_related('group', 'author')
+    posts_auth = author.posts.select_related('group')
 
     page_obj = paginate(request, posts_auth)
 
