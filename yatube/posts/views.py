@@ -100,11 +100,9 @@ def post_edit(request, post_id):
         instance=post
     )
 
-    if request.method == 'POST':
-
-        if form.is_valid():
-            form.save()
-            return redirect('posts:post_detail', post_id)
+    if form.is_valid():
+        form.save()
+        return redirect('posts:post_detail', post_id)
 
     return render(request, 'posts/create_post.html',
                   {'form': form, 'is_edit': True, 'post': post})
