@@ -6,7 +6,7 @@ from posts.models import Group, Post
 User = get_user_model()
 
 
-class StaticURLTests(TestCase):
+class PostsURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
