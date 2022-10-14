@@ -105,9 +105,9 @@ class StaticURLTests(TestCase):
             '/create/',
             f'/posts/{self.post.pk}/edit/',
         }
-        # response = self.guest_client.get('/task/', follow=True)
+        # response = self.guest_client.get('/create/', follow=True)
         # self.assertRedirects(
-        #     response, '/admin/login/?next=/task/')
+        #     response, '/auth/login/?next=/create/')
 
         for address in url_guest_names:
             with self.subTest(address=address):
