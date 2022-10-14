@@ -113,3 +113,10 @@ class StaticURLTests(TestCase):
             with self.subTest(address=address):
                 response = self.guest_client.get(address)
                 self.assertRedirects(response, f'/auth/login/?next={address}')
+
+    # Проверяем несуществующую страницы
+
+    def test_url_doesnt_exists_at_desired_location(self):
+        """Страница /mortal-kombat/ не существует"""
+        response = self.guest_client.get('/mortal-kombat/')
+        self.assertEqual(response.status_code, 404)
