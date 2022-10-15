@@ -10,8 +10,6 @@ User = get_user_model()
 
 
 def fobj_assertE(f_obj, slf):
-    # first_object = resp.context['page_obj'][0]
-
     post_text_0 = f_obj.text
     post_author_0 = f_obj.author
     post_group_0 = f_obj.group
@@ -159,7 +157,7 @@ class PostsPagesTests(TestCase):
 
         self.assertFalse(response.context['page_obj'])
 
-# Здесь импорт необходимых библиотек для тестов.
+# Пажинатор
 
 
 class PaginatorViewsTest(TestCase):
@@ -214,17 +212,3 @@ class PaginatorViewsTest(TestCase):
                 else:
                     indicator = 3
                 self.assertEqual(len(response.context['page_obj']), indicator)
-
-# #
-#     def test_first_page_contains_ten_records(self):
-#         response = self.client.get(reverse('index'))
-#         # Проверка: количество постов на первой странице равно 10.
-#         self.assertEqual(len(response.context['object_list']), 10)
-
-#     def test_second_page_contains_three_records(self):
-#         # Проверка: на второй странице должно быть три поста.
-#         response = self.client.get(reverse('index') + '?page=2')
-#         self.assertEqual(len(response.context['object_list']), 3)
-
-#     def test_paginator(self):
-#         pass
